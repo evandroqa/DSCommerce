@@ -59,5 +59,4 @@ public class OrderItemPK {
 		return Objects.equals(order, other.order) && Objects.equals(product, other.product);
 	}
 	
-	
 }

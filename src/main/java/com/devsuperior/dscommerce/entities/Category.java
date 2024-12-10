@@ -1,6 +1,7 @@
 package com.devsuperior.dscommerce.entities;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import jakarta.persistence.Entity;
@@ -20,15 +21,15 @@ public class Category {
 	private String name;
 	
 	@ManyToMany(mappedBy = "categories")
-	private Set<Product> products = new HashSet<>();
+	private Set<Product> product = new HashSet<>();
 
 	public Category() {
 	}
 
-	public Category(Long id, String name, Set<Product> products) {
+	public Category(Long id, String name, Set<Product> product) {
 		this.id = id;
 		this.name = name;
-		this.products = products;
+		this.product = product;
 	}
 
 	public Long getId() {
@@ -47,8 +48,22 @@ public class Category {
 		this.name = name;
 	}
 
-	public void setProducts(Set<Product> products) {
-		this.products = products;
+	public void setProducts(Set<Product> product) {
+		this.product = product;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj) return true;
+		if (obj == null) return false;
+		if (getClass() != obj.getClass()) return false;
+		Category other = (Category) obj;
+		return Objects.equals(id, other.id);
 	}
 	
 }
