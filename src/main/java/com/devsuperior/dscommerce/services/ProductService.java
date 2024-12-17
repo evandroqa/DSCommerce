@@ -9,35 +9,34 @@ import org.springframework.transaction.annotation.Transactional;
 import com.devsuperior.dscommerce.dto.ProductDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
-
+import com.devsuperior.dscommerce.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class ProductService {
 
 	@Autowired
 	private ProductRepository repository;
-	
-	
+
 	@Transactional(readOnly = true)
 	public ProductDTO findById(Long id) {
 		/*
-		Optional<Product> result = repository.findById(id);
-		Product product = result.get();
-		ProductDTO dto = new ProductDTO(product);
-		return dto; */
+		 * Optional<Product> result = repository.findById(id); Product product =
+		 * result.get(); ProductDTO dto = new ProductDTO(product); return dto;
+		 */
 
-		Product product = repository.findById(id).get();
+		Product product = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException("Product não encontrado"));
 		return new ProductDTO(product);
-		
-	}	
-	
+
+	}
+
 	@Transactional(readOnly = true)
 	public Page<ProductDTO> findAll(Pageable pageable) {
 		/*
-		Page<Product> result = repository.findAll(pageable);
-		Page<ProductDTO> dto = result.map(x -> new ProductDTO(x));
-		return dto;*/
-		
+		 * Page<Product> result = repository.findAll(pageable); Page<ProductDTO> dto =
+		 * result.map(x -> new ProductDTO(x)); return dto;
+		 */
+
 		return repository.findAll(pageable).map(x -> new ProductDTO(x));
 	}
 
@@ -48,7 +47,7 @@ public class ProductService {
 		entity = repository.save(entity);
 		return new ProductDTO(entity);
 	}
-	
+
 	@Transactional
 	public ProductDTO update(Long id, ProductDTO dto) {
 		Product entity = repository.getReferenceById(id);
@@ -56,7 +55,12 @@ public class ProductService {
 		entity = repository.save(entity);
 		return new ProductDTO(entity);
 	}
-	
+
+	@Transactional
+	public void delete(Long id) {
+		repository.deleteById(id);
+	}
+
 	private void copyDtoToEntity(ProductDTO dto, Product entity) {
 		// TODO Auto-generated method stub
 		entity.setName(dto.getName());
