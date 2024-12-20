@@ -28,7 +28,7 @@ public class ProductController {
 	
 	@GetMapping(value = "/{id}")
 	public ResponseEntity<ProductDTO> findById(@PathVariable Long id) {
-		// A exceção é lançada no ControllerExceptionHandler
+		// A exceção é lançada e o ControllerExceptionHandler captura a exception
 		ProductDTO dto = service.findById(id);
 		return ResponseEntity.ok(dto);
 	}
