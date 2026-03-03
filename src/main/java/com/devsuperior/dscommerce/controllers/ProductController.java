@@ -39,7 +39,7 @@ public class ProductController {
 	}
 	
 	// List all product with pagination
-	@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
+	//@PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_CLIENT')")
 	@GetMapping
 	public ResponseEntity<Page<ProductDTO>> findAll(
 			@RequestParam(name = "name", defaultValue = "") String name, 
@@ -61,6 +61,7 @@ public class ProductController {
 	}	
 	
 	// Update product
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PutMapping(value = "/{id}")
 	public ResponseEntity<ProductDTO> update(@PathVariable Long id, @Valid @RequestBody ProductDTO dto) {
 		dto = service.update(id, dto);
@@ -68,6 +69,7 @@ public class ProductController {
 	}
 	
 	// Delete product by id
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping(value = "/{id}")
 	public ResponseEntity<Void> delete(@PathVariable Long id) {
 		service.delete(id);
