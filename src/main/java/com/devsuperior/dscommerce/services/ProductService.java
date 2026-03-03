@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.devsuperior.dscommerce.dto.ProductDTO;
+import com.devsuperior.dscommerce.dto.ProductMinDTO;
 import com.devsuperior.dscommerce.entities.Product;
 import com.devsuperior.dscommerce.repositories.ProductRepository;
 import com.devsuperior.dscommerce.services.exceptions.DatabaseException;
@@ -36,13 +37,10 @@ public class ProductService {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<ProductDTO> findAll(String name, Pageable pageable) {
-		/*
-		 * Page<Product> result = repository.findAll(name, pageable); 
-		 * Page<ProductDTO> dto = result.map(x -> new ProductDTO(x)); return dto;
-		 */
-
-		return repository.searchByNmae(name, pageable).map(x -> new ProductDTO(x));
+	public Page<ProductMinDTO> findAll(String name, Pageable pageable) {
+		// Page<Product> result = repository.searchByName(name, pageable); 
+		// Page<ProductMinDTO> dto = result.map(x -> new ProductMinDTO(x)); return dto;
+		return repository.searchByName(name, pageable).map(x -> new ProductMinDTO(x));
 	}
 
 	@Transactional
@@ -81,7 +79,7 @@ public class ProductService {
 	private void copyDtoToEntity(ProductDTO dto, Product entity) {
 		// TODO Auto-generated method stub
 		entity.setName(dto.getName());
-		entity.setDescription(dto.getDescription());
+		// entity.setDescription(dto.getDescription());
 		entity.setPrice(dto.getPrice());
 		entity.setImgUrl(dto.getImgUrl());
 	}

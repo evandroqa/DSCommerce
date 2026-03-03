@@ -13,5 +13,5 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			+ "FROM Product obj "
 			+ "WHERE UPPER(obj.name) LIKE UPPER(CONCAT('%', :name, '%')) "
 			+ "ORDER BY obj.name")
-	Page<Product> searchByNmae(String name, Pageable pageable);
+	Page<Product> searchByName(String name, Pageable pageable);
 }
