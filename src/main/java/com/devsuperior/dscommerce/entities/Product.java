@@ -100,6 +100,10 @@ public class Product {
 		this.categories = categories;
 	}
 
+	public Set<Category> getCategories() {
+		return categories;
+	}
+
 	public Set<OrderItem> getItems() {
 		return items;
 	}
