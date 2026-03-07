@@ -33,10 +33,14 @@ public class OrderService {
 	@Autowired
 	private UserService userService;
 	
+	@Autowired
+	private AuthService authService;
+	
 	@Transactional(readOnly = true)
 	public OrderDTO findById(Long id) {
 		Order order = repository.findById(id)
 				.orElseThrow(() -> new ResourceNotFoundException("Pedido não encontrado"));
+		authService.validateSelfOrAdmin(order.getClient().getId());
 		return new OrderDTO(order);
 
 	}
@@ -60,4 +64,29 @@ public class OrderService {
 		
 		return new OrderDTO(order);
 	}
+	
+	// Melhoramento do método acima ...
+	// remove esta linha
+	// orderItemRepository.saveAll(order.getItems());
+	// Inserir ante no Order
+	// @OneToMany(mappedBy = "id.order", cascade = CascadeType.ALL)
+	// private Set<OrderItem> items = new HashSet<>();
+	/*
+	@Transactional
+	public OrderDTO insert(OrderDTO dto) {
+	    Order order = new Order();
+	    order.setMoment(Instant.now());
+	    order.setStatus(OrderStatus.WAITING_PAYMENT);
+	    order.setClient(userService.authenticated());
+
+	    for (OrderItemDTO itemDto : dto.getItems()) {
+	        Product product = productRepository.getReferenceById(itemDto.getProductId());
+	        OrderItem item = new OrderItem(order, product, itemDto.getQuantity(), product.getPrice());
+	        order.getItems().add(item);
+	    }
+
+	    repository.save(order);
+
+	    return new OrderDTO(order);
+	} */
 }
